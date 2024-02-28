@@ -66,12 +66,12 @@ public:
 	//добавить конструктор копировани€
 	Matrix() : row(1), column(0){
 		printf("Matrix()\n");
-		matrx = new Vector*[row];
+		AllocateMemory();
 		ZerosFill();
 	}
 	Matrix(int r, int c) : row(r), column(c) {
-		matrx = new Vector*[row];
 		printf("Matrix(int r, int c)\n");
+		AllocateMemory();
 		ZerosFill();
 	}
 	int GetWidth() {
@@ -81,13 +81,19 @@ public:
 		return column;
 	}
 	// „то-то не так
+	void AllocateMemory() {
+		matrx = new Vector * [row];
+		for (int i = 0; i < row; i++) {
+			matrx[i] = new Vector(column);
+		}
+	}
 	void ReadMatrix() {
-		for (int i = 0; i < column; i++) {
+		for (int i = 0; i < row; i++) {
 			matrx[i]->ReadVector();
  		}
 	}
 	void ZerosFill() {
-		for (int i = 0; i < column; i++) {
+		for (int i = 0; i < row; i++) {
 			matrx[i]->ZerosFill();
 		}
 	}
@@ -98,9 +104,13 @@ public:
 	}
 	~Matrix() {
 		printf("~Matrix()\n");
+		for (int i = 0; i < row; i++) {
+			delete matrx[i];
+		}
 		delete[] matrx;
 	}
 };
+
 
 class Square_matrix : public Matrix {
 public:

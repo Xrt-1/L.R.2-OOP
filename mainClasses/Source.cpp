@@ -12,7 +12,9 @@ int main() {
 	c->ReadVector();
 	delete c;
 	//////////////////////////////////
+	//Создание матриц класса Matrix, методы
 	Matrix as(5, 2);
 	as.ReadMatrix();
 	return 0;
+
 }
