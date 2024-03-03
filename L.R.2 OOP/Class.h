@@ -13,6 +13,7 @@ public:
 		size = 0;
 		vector = new int[size];
 		printf("Vector()\n");
+		srand(time(NULL));
 	}
 	Vector(const int size) : size(size) { 
 		vector = new int[size];
@@ -32,11 +33,16 @@ public:
 		}
 	}
 	void RandomFill() {
-		srand(time(NULL));
 		for (int i = 0; i < size; i++) {
 			vector[i] = rand() % 100;
 		}
-		printf("RandomFill(int* & vector)\n");
+		printf("RandomFillVector()\n");
+	}
+	int GetValue(int position) {
+		return vector[position];
+	}
+	void SetValue(int position, int value) {
+		vector[position] = value;
 	}
 	int* GetVector() {
 		return vector;
@@ -63,16 +69,29 @@ protected:
 	int row, column;
 	Vector** matrx;
 public:
-	//добавить конструктор копировани€
 	Matrix() : row(1), column(0){
 		printf("Matrix()\n");
 		AllocateMemory();
 		ZerosFill();
+		printf("Matrix()\n");
 	}
 	Matrix(int r, int c) : row(r), column(c) {
 		printf("Matrix(int r, int c)\n");
 		AllocateMemory();
 		ZerosFill();
+		printf("Matrix(int r, int c)\n");
+	}
+	
+	Matrix(Matrix& other) {
+		row = other.row;
+		column = other.column;
+		AllocateMemory();
+		for (int i = 0; i < row; i++) {
+			for (int j = 0; j < column; j++) {
+				matrx[i]->SetValue(j, (other.matrx[i])->GetValue(j));
+			}
+		}
+		printf("Matrix(Matrix& other)\n");
 	}
 	int GetWidth() {
 		return row;
@@ -80,7 +99,6 @@ public:
 	int GetHigh() {
 		return column;
 	}
-	// „то-то не так
 	void AllocateMemory() {
 		matrx = new Vector * [row];
 		for (int i = 0; i < row; i++) {
@@ -98,7 +116,7 @@ public:
 		}
 	}
 	virtual void RandomFill() {
-		for (int i = 0; i < column; i++) {
+		for (int i = 0; i < row; i++) {
 			matrx[i]->RandomFill();
 		}
 	}
@@ -116,17 +134,31 @@ class Square_matrix : public Matrix {
 public:
 	Square_matrix(){
 		printf("Square_matrix()\n");
-		row = 1;
-		column = 1;
+		row = column = 1;
+		AllocateMemory();
+		ZerosFill();
 	}
 	Square_matrix(int dimension) {
 		row = column = dimension;
+		AllocateMemory();
+		ZerosFill();
 		printf("Square_matrix(int dimension)\n");
 	}
-	
-	void RandomFill() {
-		for (int i=0; i < column; i++) {
+	int GetSum() {
+		int sum = 0;
+		for (int i = 0; i < row; i++) {
+			for (int j = 0; j < column; j++) {
+				sum += (matrx[i]->GetVector())[j];
+			}
 		}
+		return sum;
 	}
+	void RandomFill() override {
+		printf("RandomFill() override\n");
+	}
+	~Square_matrix() {
+		printf("~Square_matrix()\n");
+	}
+	
 };
 
